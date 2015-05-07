@@ -1,0 +1,74 @@
+---
+
+elasticsearch_version: 1.5.2
+elasticsearch_url: https://download.elastic.co/elasticsearch/elasticsearch
+
+elasticsearch_user: elasticsearch
+elasticsearch_group: elasticsearch
+
+elasticsearch_cluster_name: logging
+elasticsearch_node_name: es-01
+elasticsearch_service_name: elasticsearch
+
+elasticsearch_home: /usr/share/elasticsearch
+elasticsearch_config_dir: /etc/elasticsearch
+elasticsearch_data_dir: /var/lib/elasticsearch
+elasticsearch_work_dir: /tmp/elasticsearch
+elasticsearch_log_dir: /var/log/elasticsearch
+
+
+elasticsearch_plugin_dir: "{{elasticsearch_home}}/plugins"
+elasticsearch_plugins: []                       # Manage elasticsearch plugins (install/remove)
+                                                # Ex. elasticsearch_plugins:
+                                                #       - name: <plugin name>
+                                                #         url: <optional plugin url>
+                                                #         dir: <optional plugin dir>
+                                                #         remove: yes # Optional the plugin will be removed
+
+# Options
+elasticsearch_network_host: 127.0.0.1           # Listen the host
+elasticsearch_http_port: 9200                   # Listen the port fot HTTP traffic
+elasticsearch_http_cors_enabled: 'no'            # Enable CORS
+elasticsearch_http_cors_allow_origin: "*"       # Set allowed origins
+elasticsearch_http_cors_allow_methods: OPTIONS, HEAD, GET, POST, PUT, DELETE
+elasticsearch_max_open_files: 65535
+elasticsearch_gateway_type: local
+elasticsearch_script_disable_dynamic: True
+elasticsearch_network_bind_host: "{{elasticsearch_network_host}}"
+elasticsearch_network_publish_host: "{{elasticsearch_network_host}}"
+
+elasticsearch_heapsize: "{{ ( ansible_memtotal_mb * 0.5 )|round|int }}m"
+elasticsearch_thread_stacksize: 256k
+elasticsearch_env_options: ""
+elasticsearch_gc_settings: >
+  -XX:+UseParNewGC
+  -XX:+UseConcMarkSweepGC
+  -XX:CMSInitiatingOccupancyFraction=75
+  -XX:+UseCMSInitiatingOccupancyOnly
+  -XX:+HeapDumpOnOutOfMemoryError
+
+
+elasticsearch_env: 
+  ES_HOME: "{{ elasticsearch_home }}"
+  ES_CLASSPATH: "$ES_CLASSPATH:{{ elasticsearch_home }}/lib/*:{{ elasticsearch_home }}/lib/sigar/*"
+  ES_JAVA_OPTS: >
+    -server -Djava.net.preferIPv4Stack=true
+    -Des.config={{ elasticsearch_config_dir }}/elasticsearch.yml
+    -Xms{{ elasticsearch_heapsize}}
+    -Xmx{{ elasticsearch_heapsize}}
+    -Xss{{ elasticsearch_thread_stacksize }}
+    {{ elasticsearch_gc_settings|trim }} {{ elasticsearch_env_options|trim }}
+  
+  #http://www.elastic.co/guide/en/elasticsearch/guide/master/heap-sizing.html
+
+#ES_HEAP_SIZE: " {{elasticsearch_heapsize }} " set on command line instead
+#{% if elasticsearch_use_gc_logging is defined %}export ES_USE_GC_LOGGING=true{% endif %}
+
+# Environment Vars
+# Maximum number of open files, defaults to 65535.
+#MAX_OPEN_FILES={{ elasticsearch_max_open_files }}
+# Maximum locked memory size. Set to "unlimited" if you use the
+# bootstrap.mlockall option in elasticsearch.yml. You must also set ES_HEAP_SIZE.
+# MAX_LOCKED_MEMORY=unlimited
+#{% if elasticsearch_max_locked_memory is defined %}MAX_LOCKED_MEMORY={{ elasticsearch_max_locked_memory }}{% endif %}
+#MaxMapCount:

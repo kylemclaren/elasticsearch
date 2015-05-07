@@ -1,0 +1,19 @@
+---
+
+- name: install debian - add package verify key
+  apt_key:
+    url: http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+    state: present
+
+- name: install debian - add elasticsearch apt package to apt
+  apt_repository:
+    repo: 'deb http://packages.elasticsearch.org/elasticsearch/1.5/debian stable main'
+    state: present
+
+- name: install debian - elasticsearch package
+  apt:
+    name=elasticsearch
+    state=present
+    update_cache=yes
+    cache_valid_time=3600
+

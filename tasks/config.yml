@@ -1,0 +1,69 @@
+---
+
+- name: config - elasticsearch group
+  group:
+    name={{ elasticsearch_group }}
+    state=present
+
+- name: create elasticsearch user
+  user:
+    name={{ elasticsearch_user }}
+    group={{ elasticsearch_group }}
+
+- name: config - set folder permissions
+  file:
+    state=directory
+    path={{ elasticsearch_home }}
+    owner={{ elasticsearch_user }}
+    group={{ elasticsearch_group }}
+    recurse=yes
+
+- name: config - elasticsearch.yml
+  template:
+    src=elasticsearch.yml.j2
+    dest={{ elasticsearch_config_dir }}/elasticsearch.yml
+    owner={{ elasticsearch_user }}
+    group={{ elasticsearch_group }}
+    mode=0644
+  notify: restart elasticsearch
+
+- name: config - logging.yml
+  template:
+    src=logging.yml.j2
+    dest={{ elasticsearch_config_dir }}/logging.yml
+    owner={{ elasticsearch_user }}
+    group={{ elasticsearch_group }}
+    mode=0644
+  notify: restart elasticsearch
+
+- name: config - elastisearch defaults
+  template: 
+    src=elasticsearch.j2
+    dest=/etc/default/elasticsearch
+    owner={{ elasticsearch_user }}
+    group={{ elasticsearch_group }}
+    mode=0644
+  notify: restart elasticsearch
+
+- name: config -  set limits
+  lineinfile: 
+    dest: /etc/security/limits.conf
+    regexp: "^{{elasticsearch_user}}     -    nofile    {{elasticsearch_max_open_files}}"
+    insertafter: EOF
+    line: "{{elasticsearch_user}}     -    nofile    {{elasticsearch_max_open_files}}"
+  when: elasticsearch_max_open_files is defined
+
+- name: config - set memlock limits
+  lineinfile: 
+    dest: /etc/security/limits.conf 
+    regexp: "^{{elasticsearch_user}}     -    memlock   {{elasticsearch_max_locked_memory}}"
+    insertafter: EOF 
+    line: "{{elasticsearch_user}}     -    memlock   {{elasticsearch_max_locked_memory}}"
+  when: elasticsearch_max_locked_memory is defined
+
+- lineinfile: dest=/etc/pam.d/su regexp='^session    required   pam_limits.so' insertafter=EOF line='session    required   pam_limits.so'
+- lineinfile: dest=/etc/pam.d/common-session regexp='^session    required   pam_limits.so' insertafter=EOF line='session    required   pam_limits.so'
+- lineinfile: dest=/etc/pam.d/common-session-noninteractive regexp='^session    required   pam_limits.so' insertafter=EOF line='session    required   pam_limits.so'
+- lineinfile: dest=/etc/pam.d/sudo regexp='^session    required   pam_limits.so' insertafter=EOF line='session    required   pam_limits.so'
+- lineinfile: dest=/etc/init.d/elasticsearch regexp='^(DAEMON_OPTS=".*-Des.max-open-files=true")$' insertafter='^(DAEMON_OPTS=".*CONF_DIR")$' line='DAEMON_OPTS="$DAEMON_OPTS -Des.max-open-files=true"'
+

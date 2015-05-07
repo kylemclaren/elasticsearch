@@ -1,0 +1,6 @@
+---
+# handlers file for elasticsearch
+
+- name: restart elasticsearch
+  runit: name={{ elasticsearch_service_name }} state=restarted
+

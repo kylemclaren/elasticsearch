@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# turn off swapping to clear swap file
+sudo swapoff -a 
+
+# reduce swapping to miniumum without causing the OS to kill
+sudo sysctl vm.swappiness=1
+
+# re-enable the swapfile
+sudo swapon -a
+
+#sysctl -q -w vm.max_map_count=$MAX_MAP_COUNT
+#ulimit -n $MAX_OPEN_FILES
+#ulimit -l $MAX_LOCKED_MEMORY
+
+exec 2>&1
+exec chpst -e /etc/sv/{{ service_name }}/env -u {{ service_user }} {{ service_command }}
+
+
+

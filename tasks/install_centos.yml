@@ -1,0 +1,18 @@
+---
+- name: CentOS - Add Elasticsearch package key
+  rpm_key:
+    key: http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+    state: present
+
+- name: CentOS - Add Elasticsearch yum config to yum
+  copy:
+    src: elasticsearch.repo
+    dest: /etc/yum.repos.d/elasticsearch.repo
+    mode: 0644
+
+- name: CentOS - Install Elasticsearch
+  yum:
+    pkg=logstash
+    state=present
+    update_cache=yes
+    enablerepo=elasticsearch
