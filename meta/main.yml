@@ -1,7 +1,7 @@
 ---
 dependencies:
   - { role : williamyeh.oracle-java, java_version: 8 }
-  - { role : bakins.runit }
+  - { role : gotansible.runit }
 
 galaxy_info:
   author: Franklin Wise

@@ -15,18 +15,4 @@
 - debug: var=elasticsearch_env
 
 - name: elasticsearch - service
-  include: runit_service.yml
-  vars:
-    service_name: elasticsearch
-    service_user: "{{elasticsearch_user}}"
-    service_command: >
-      {{ elasticsearch_home}}/bin/elasticsearch
-      --default.config={{ elasticsearch_config_dir }}/elasticsearch.yml
-      --default.path.home={{ elasticsearch_home}}
-      --default.path.logs={{ elasticsearch_log_dir }}
-      --default.path.data={{ elasticsearch_data_dir }}
-      --default.path.work={{ elasticsearch_work_dir }}
-      --default.path.conf={{ elasticsearch_config_dir }}
-      -Des.max-open-files=true
-    service_env_vars: "{{elasticsearch_env}}"
-
+  include: service.yml
