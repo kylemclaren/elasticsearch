@@ -43,7 +43,6 @@ CONF_FILE={{elasticsearch_config_dir}}/elasticsearch.yml
 
 # Additional Java OPTS
 #ES_JAVA_OPTS=
-ES_JAVA_OPTS="{{ elasticsearch_java_opts }} -Djava.net.preferIPv4Stack=true"
 
 # Environment Vars
 {% if elasticsearch_use_gc_logging is defined %}export ES_USE_GC_LOGGING=true{% endif %}
