@@ -218,6 +218,8 @@ network.host: {{ elasticsearch_network_host }}
 # transport.tcp.port: 9300
 {% if elasticsearch_transport_tcp_port is defined %}transport.tcp.port: {{ elasticsearch_transport_tcp_port }}{% endif %}
 
+transport.host: {{ elasticsearch_network_host }}
+
 # Enable compression for all communication between nodes (disabled by default):
 #
 # transport.tcp.compress: true
@@ -226,7 +228,7 @@ network.host: {{ elasticsearch_network_host }}
 # Set a custom port to listen for HTTP traffic:
 #
 http.port: {{ elasticsearch_http_port }}
-
+http.host: {{ elasticsearch_network_host }}
 # Set a custom allowed content length:
 #
 # http.max_content_length: 100mb
