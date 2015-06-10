@@ -44,12 +44,12 @@
 # Allow this node to be eligible as a master node (enabled by default):
 #
 # node.master: true
-{% if elasticsearch_node_master is defined %}node.master: {{ elasticsearch_node_master }}{% endif %}
+{% if elasticsearch_node_master is defined %}node.master: {{ elasticsearch_node_master|lower }}{% endif %}
 #
 # Allow this node to store data (enabled by default):
 #
 # node.data: true
-{% if elasticsearch_node_data is defined %}node.data: {{ elasticsearch_node_data }}{% endif %}
+{% if elasticsearch_node_data is defined %}node.data: {{ elasticsearch_node_data|lower }}{% endif %}
 
 # You can exploit these settings to design advanced cluster topologies.
 #
@@ -200,33 +200,33 @@ path.plugins: {{ elasticsearch_plugin_dir }}
 # Set the bind address specifically (IPv4 or IPv6):
 #
 # network.bind_host: 192.168.0.1
-network.bind_host: {{ elasticsearch_network_bind_host }}
-
-# Set the address other nodes will use to communicate with this node. If not
-# set, it is automatically derived. It must point to an actual IP address.
+#network.bind_host: {{ elasticsearch_network_bind_host }}
 #
-# network.publish_host: 192.168.0.1
-network.publish_host: {{ elasticsearch_network_publish_host }}
-
-# Set a custom port for the node to node communication (9300 by default):
+## Set the address other nodes will use to communicate with this node. If not
+## set, it is automatically derived. It must point to an actual IP address.
+##
+## network.publish_host: 192.168.0.1
+#network.publish_host: {{ elasticsearch_network_publish_host }}
 #
-# transport.tcp.port: 9300
-{% if elasticsearch_transport_tcp_port is defined %}transport.tcp.port: {{ elasticsearch_transport_tcp_port }}{% endif %}
-
-transport.bind_host:  {{ elasticsearch_network_bind_host }}
-transport.publish_host:  {{ elasticsearch_network_publish_host }}
-
-# Enable compression for all communication between nodes (disabled by default):
+## Set a custom port for the node to node communication (9300 by default):
+##
+## transport.tcp.port: 9300
+#{% if elasticsearch_transport_tcp_port is defined %}transport.tcp.port: {{ elasticsearch_transport_tcp_port }}{% endif %}
 #
-# transport.tcp.compress: true
-{% if elasticsearch_transport_tcp_compress is defined %}transport.tcp.compress: {{ elasticsearch_transport_tcp_compress }}{% endif %}
-
-# Set a custom port to listen for HTTP traffic:
+#transport.bind_host:  {{ elasticsearch_network_bind_host }}
+#transport.publish_host:  {{ elasticsearch_network_publish_host }}
 #
-http.port: {{ elasticsearch_http_port }}
-http.bind_host: {{ elasticsearch_network_bind_host }}
-http.publish_host: {{ elasticsearch_network_publish_host }}
-
+## Enable compression for all communication between nodes (disabled by default):
+##
+## transport.tcp.compress: true
+#{% if elasticsearch_transport_tcp_compress is defined %}transport.tcp.compress: {{ elasticsearch_transport_tcp_compress }}{% endif %}
+#
+## Set a custom port to listen for HTTP traffic:
+##
+#http.port: {{ elasticsearch_http_port }}
+#http.bind_host: {{ elasticsearch_network_bind_host }}
+#http.publish_host: {{ elasticsearch_network_publish_host }}
+#
 # Set a custom allowed content length:
 #
 # http.max_content_length: 100mb
