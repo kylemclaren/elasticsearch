@@ -7,7 +7,7 @@
 
 - name: install debian - add elasticsearch apt package to apt
   apt_repository:
-    repo: 'deb http://packages.elasticsearch.org/elasticsearch/1.5/debian stable main'
+    repo: 'deb http://packages.elastic.co/elasticsearch/1.6/debian stable main'
     state: present
 
 - name: install debian - elasticsearch package
