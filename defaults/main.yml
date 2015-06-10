@@ -8,6 +8,7 @@ elasticsearch_group: elasticsearch
 
 elasticsearch_cluster_name: logging
 elasticsearch_node_name: es-01
+
 elasticsearch_service_name: elasticsearch
 
 elasticsearch_home: /usr/share/elasticsearch
@@ -26,7 +27,9 @@ elasticsearch_plugins: []                       # Manage elasticsearch plugins (
                                                 #         remove: yes # Optional the plugin will be removed
 
 # Options
-elasticsearch_network_host: 127.0.0.1           # Listen the host
+#elasticsearch_network_host: 127.0.0.1           # Listen the host
+elasticsearch_network_bind_host: 0.0.0.0 
+elasticsearch_network_publish_host: "{{ ansible_default_ipv4['address'] }}"
 elasticsearch_http_port: 9200                   # Listen the port fot HTTP traffic
 elasticsearch_http_cors_enabled: 'no'            # Enable CORS
 elasticsearch_http_cors_allow_origin: "*"       # Set allowed origins
@@ -34,8 +37,6 @@ elasticsearch_http_cors_allow_methods: OPTIONS, HEAD, GET, POST, PUT, DELETE
 elasticsearch_max_open_files: 65535
 elasticsearch_gateway_type: local
 elasticsearch_script_disable_dynamic: True
-elasticsearch_network_bind_host: "{{elasticsearch_network_host}}"
-elasticsearch_network_publish_host: "{{elasticsearch_network_host}}"
 
 elasticsearch_heapsize: "{{ ( ansible_memtotal_mb * 0.5 )|round|int }}m"
 elasticsearch_thread_stacksize: 256k
