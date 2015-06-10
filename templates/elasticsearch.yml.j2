@@ -208,6 +208,11 @@ network.bind_host: {{ elasticsearch_network_bind_host }}
 # network.publish_host: 192.168.0.1
 network.publish_host: {{ elasticsearch_network_publish_host }}
 
+{% if elasticsearch_network_bind_host != elasticsearch_network_publish_host %}
+# Set both 'bind_host' and 'publish_host':
+network.host: {{ elasticsearch_network_host }}
+{% endif %}
+
 # Set a custom port for the node to node communication (9300 by default):
 #
 # transport.tcp.port: 9300
