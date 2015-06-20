@@ -4,7 +4,7 @@
   runit:
     name: elasticsearch
     enabled: yes
-    state: up
+    state: start
     timeout: 10
     user: "{{ elasticsearch_user }}"
     command: >
