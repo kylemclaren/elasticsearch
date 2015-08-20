@@ -1,0 +1,22 @@
+---
+- hosts: all
+  sudo: true
+
+  roles:
+    - role: elasticsearch
+      elasticsearch_node_name: "{{ inventory_hostname }}"
+      elasticsearch_cluster_name: test-main-search
+
+      elasticsearch_node_data: false
+      elasticsearch_node_master: true
+      elasticsearch_http_enabled: true
+
+      elasticsearch_discovery_zen_minimum_master_nodes: 1
+      elasticsearch_discovery_zen_ping_multicast_enabled: false
+      elasticsearch_discovery_zen_ping_unicast_hosts:
+        - 192.168.50.23
+        - 192.168.50.22
+
+      elasticsearch_index_number_of_shards: 5
+      elasticsearch_index_number_of_replicas: 1
+
