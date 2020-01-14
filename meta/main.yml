@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - { role : williamyeh.oracle-java, java_version: 8 }
+  - { role : william-yeh.oracle-java, java_version: 8 }
   - { role : gotansible.runit }
 
 galaxy_info:
